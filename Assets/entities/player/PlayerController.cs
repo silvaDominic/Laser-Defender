@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour {
 
     public float thrust = 5.0f;
     public float shipPadding = 1.0f;
+    public GameObject laserPrefab;
+    public float pulseLaserSpeed = 5f;
+    public float fireRate = 0.2f;
 
     private float xmin;
     private float xmax;
@@ -13,11 +16,11 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         float distanceDiff = gameObject.transform.position.z - Camera.main.transform.position.z;
-        Vector3 leftViewPort = Camera.main.ViewportToWorldPoint(new Vector3(0 , 0, distanceDiff));
-        Vector3 rightViewPort = Camera.main.ViewportToWorldPoint(new Vector3(1.0f, 0, distanceDiff));
+        Vector3 leftBoundary = Camera.main.ViewportToWorldPoint(new Vector3(0 , 0, distanceDiff));
+        Vector3 rightBoundary = Camera.main.ViewportToWorldPoint(new Vector3(1.0f, 0, distanceDiff));
 
-        xmin = leftViewPort.x + shipPadding;
-        xmax = rightViewPort.x - shipPadding;
+        xmin = leftBoundary.x + shipPadding;
+        xmax = rightBoundary.x - shipPadding;
 	}
 	
 	// Update is called once per frame
@@ -32,9 +35,23 @@ public class PlayerController : MonoBehaviour {
             gameObject.transform.position += Vector3.right * thrust * Time.deltaTime;
         }
 
-        //Restricts players ship to gamespace
-        float newX = Mathf.Clamp(gameObject.transform.position.x, xmin, xmax);
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            InvokeRepeating("FireProjectile", 0.00000001f, fireRate);
+        }
 
+        if (Input.GetKeyUp(KeyCode.Space)) {
+            CancelInvoke("FireProjectile");
+        }
+
+         //Restricts players ship to gamespace
+        float newX = Mathf.Clamp(gameObject.transform.position.x, xmin, xmax);
         gameObject.transform.position = new Vector3(newX, gameObject.transform.position.y, gameObject.transform.position.z);
+
+
+    }
+
+    void FireProjectile() {
+        GameObject pulseLaser = Instantiate(laserPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+        pulseLaser.GetComponent<Rigidbody2D>().velocity = new Vector3(0, pulseLaserSpeed, 0);
     }
 }
