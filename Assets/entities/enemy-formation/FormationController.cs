@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour {
+public class FormationController : MonoBehaviour {
 
     public GameObject enemyPrefab;
     // 'Width' of enemy formation
@@ -26,11 +26,7 @@ public class EnemySpawner : MonoBehaviour {
         xmin = leftBoundary.x;
         xmax = rightBoundary.x;
 
-        // Generates enemies on positioned game objects at start of game
-        foreach (Transform child in gameObject.transform) {
-            GameObject enemy = Instantiate(enemyPrefab, child.transform.position, Quaternion.identity) as GameObject;
-            enemy.transform.parent = child;
-        }
+        ResetFormation();
 	}
 
     public void OnDrawGizmos() {
@@ -41,6 +37,15 @@ public class EnemySpawner : MonoBehaviour {
     void Update () {
         MoveFormation();
 	}
+
+    void ResetFormation() {
+        Debug.Log("RESETTING FORMATION");
+        // Generates enemies on positioned game objects at start of game
+        foreach (Transform child in gameObject.transform) {
+            GameObject enemy = Instantiate(enemyPrefab, child.transform.position, Quaternion.identity) as GameObject;
+            enemy.transform.parent = child;
+        }
+    }
 
     void MoveFormation() {
         if (isMovingRight) {
@@ -57,5 +62,19 @@ public class EnemySpawner : MonoBehaviour {
         } else if (rightEdgeOfFormation >= xmax) {
             isMovingRight = false;
         }
+
+        if (AllMembersAreDead()) {
+            Debug.Log("ALL ENEMIES KILLED.");
+            ResetFormation();
+        }
+    }
+
+    bool AllMembersAreDead() {
+        foreach (Transform childPositionGameObject in gameObject.transform) {
+            if (childPositionGameObject.childCount > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }

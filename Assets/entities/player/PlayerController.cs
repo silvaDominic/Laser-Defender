@@ -6,9 +6,10 @@ public class PlayerController : MonoBehaviour {
 
     public float thrust = 5.0f;
     public float shipPadding = 1.0f;
-    public GameObject laserPrefab;
+    public GameObject projectile;
     public float pulseLaserSpeed = 5f;
     public float fireRate = 0.2f;
+    public float health = 100;
 
     private float xmin;
     private float xmax;
@@ -25,33 +26,42 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKey(KeyCode.UpArrow)) {
-            gameObject.transform.position += new Vector3 (0, thrust * Time.deltaTime, 0);
-        } else if (Input.GetKey(KeyCode.DownArrow)) {
-            gameObject.transform.position += new Vector3(0, -thrust * Time.deltaTime, 0);
-        } else if (Input.GetKey(KeyCode.LeftArrow)) {
+        if (Input.GetKey(KeyCode.LeftArrow)) {
             gameObject.transform.position += Vector3.left * thrust * Time.deltaTime;
         } else if (Input.GetKey(KeyCode.RightArrow)) {
             gameObject.transform.position += Vector3.right * thrust * Time.deltaTime;
         }
 
         if (Input.GetKeyDown(KeyCode.Space)) {
-            InvokeRepeating("FireProjectile", 0.00000001f, fireRate);
+            InvokeRepeating("Shoot", 0.0000001f, fireRate);
         }
 
         if (Input.GetKeyUp(KeyCode.Space)) {
-            CancelInvoke("FireProjectile");
+            CancelInvoke("Shoot");
         }
 
-         //Restricts players ship to gamespace
+        //Restricts players ship to gamespace
         float newX = Mathf.Clamp(gameObject.transform.position.x, xmin, xmax);
         gameObject.transform.position = new Vector3(newX, gameObject.transform.position.y, gameObject.transform.position.z);
-
-
     }
 
-    void FireProjectile() {
-        GameObject pulseLaser = Instantiate(laserPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+    private void OnTriggerEnter2D(Collider2D collider) {
+        Projectile projectile = collider.gameObject.GetComponent<Projectile>();
+        if (projectile) {
+            Debug.Log("Player Hit " + collider.gameObject);
+            projectile.Hit();
+            this.health -= projectile.GetDamage();
+
+            if (this.health <= 0) {
+                Debug.Log("Player Killed");
+                Destroy(this.gameObject);
+            }
+        }
+    }
+
+    void Shoot() {
+        Vector3 projectileStartingPos = gameObject.transform.position + new Vector3(0, 0.5f, 0);
+        GameObject pulseLaser = Instantiate(projectile,  projectileStartingPos, Quaternion.identity) as GameObject;
         pulseLaser.GetComponent<Rigidbody2D>().velocity = new Vector3(0, pulseLaserSpeed, 0);
     }
 }
