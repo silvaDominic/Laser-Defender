@@ -75,7 +75,7 @@ public class FormationController : MonoBehaviour {
         Transform positionTransform = NextFreePosition();
         if (positionTransform != null) {
             SpawnNewEnemy(positionTransform);
-            Debug.Log("New Enemy Spawned");
+            Debug.Log("New Enemy Spawned at " + positionTransform.position);
             Invoke("SpawnUntilFull", spawnDuration);
         }
     }

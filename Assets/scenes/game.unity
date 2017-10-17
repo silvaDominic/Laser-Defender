@@ -336,6 +336,7 @@ MonoBehaviour:
   spread: 11.5
   depth: 7
   horizontalSpeed: 5
+  spawnDuration: 2
 --- !u!4 &670346442
 Transform:
   m_ObjectHideFlags: 0
@@ -367,7 +368,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4659028679121890, guid: 7db43d12ced253b4fab301299d4bf739, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 15
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 4659028679121890, guid: 7db43d12ced253b4fab301299d4bf739, type: 2}
       propertyPath: m_LocalPosition.z
@@ -391,7 +392,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4659028679121890, guid: 7db43d12ced253b4fab301299d4bf739, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1496018500530220, guid: 7db43d12ced253b4fab301299d4bf739, type: 2}
       propertyPath: m_Name
@@ -476,10 +477,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2070068903}
   - {fileID: 272869236}
+  - {fileID: 2070068903}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1614680373
 Prefab:
@@ -616,7 +617,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4551942174049142, guid: 7310a8bed79416642861bcd57dc821de, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114303399199507562, guid: 7310a8bed79416642861bcd57dc821de,
         type: 2}
@@ -640,7 +641,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4659028679121890, guid: 7db43d12ced253b4fab301299d4bf739, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -15
+      value: -25
       objectReference: {fileID: 0}
     - target: {fileID: 4659028679121890, guid: 7db43d12ced253b4fab301299d4bf739, type: 2}
       propertyPath: m_LocalPosition.z
@@ -664,7 +665,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4659028679121890, guid: 7db43d12ced253b4fab301299d4bf739, type: 2}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1496018500530220, guid: 7db43d12ced253b4fab301299d4bf739, type: 2}
       propertyPath: m_Name
