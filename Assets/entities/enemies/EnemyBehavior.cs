@@ -9,11 +9,6 @@ public class EnemyBehavior : MonoBehaviour {
     public float pulseLaserSpeed = 5f;
     public float fireRate = 0.2f;
     public float shotsPerSecond = 0.5f;
-
-    // Use this for initialization
-    void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () {

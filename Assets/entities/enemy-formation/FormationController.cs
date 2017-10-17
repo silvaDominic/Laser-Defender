@@ -11,10 +11,12 @@ public class FormationController : MonoBehaviour {
     public float depth;
     // Speeds of enemy formation
     public float horizontalSpeed;
+    public float spawnDuration = 2;
 
     private bool isMovingRight = true;
     private float xmax;
     private float xmin;
+    private int formationSize;
 
     // Use this for initialization
     void Start () {
@@ -36,17 +38,49 @@ public class FormationController : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         MoveFormation();
-	}
 
-    void ResetFormation() {
-        Debug.Log("RESETTING FORMATION");
-        // Generates enemies on positioned game objects at start of game
-        foreach (Transform child in gameObject.transform) {
-            GameObject enemy = Instantiate(enemyPrefab, child.transform.position, Quaternion.identity) as GameObject;
-            enemy.transform.parent = child;
+        if (AllEnemiesAreDead()) {
+            Debug.Log("ALL ENEMIES KILLED.");
+            SpawnUntilFull();
         }
     }
 
+    // Resets formation
+    void ResetFormation() {
+        Debug.Log("RESETTING FORMATION");
+        SpawnUntilFull();
+    }
+
+    // Creates an instance of an enemy at a designated position
+    void SpawnNewEnemy(Transform positionGameObject) {
+        if (positionGameObject != null) {
+            GameObject enemy = Instantiate(enemyPrefab, positionGameObject.transform.position, Quaternion.identity) as GameObject;
+            //enemy.GetComponent<EnemyBehavior>().SetPositionInFormation(positionInFormation);
+            enemy.transform.parent = positionGameObject;
+        }
+    }
+
+    // Returns the next available position available in the formation
+    Transform NextFreePosition() {
+        foreach (Transform positionGameObject in gameObject.transform) {
+            if (positionGameObject.childCount == 0) {
+                return positionGameObject;
+            }
+        }
+        return null;
+    }
+
+    // Spawns enemies as long as there is an available position
+    void SpawnUntilFull() {
+        Transform positionTransform = NextFreePosition();
+        if (positionTransform != null) {
+            SpawnNewEnemy(positionTransform);
+            Debug.Log("New Enemy Spawned");
+            Invoke("SpawnUntilFull", spawnDuration);
+        }
+    }
+
+    // Moves enemy formation left to right
     void MoveFormation() {
         if (isMovingRight) {
             gameObject.transform.position += Vector3.right * horizontalSpeed * Time.deltaTime;
@@ -62,16 +96,13 @@ public class FormationController : MonoBehaviour {
         } else if (rightEdgeOfFormation >= xmax) {
             isMovingRight = false;
         }
-
-        if (AllMembersAreDead()) {
-            Debug.Log("ALL ENEMIES KILLED.");
-            ResetFormation();
-        }
     }
 
-    bool AllMembersAreDead() {
-        foreach (Transform childPositionGameObject in gameObject.transform) {
-            if (childPositionGameObject.childCount > 0) {
+    // Checks if all enemies are dead
+    // Loops through all Position objects in formation and checks whether there are any child objects (Enemies) remaining
+    bool AllEnemiesAreDead() {
+        foreach (Transform positionGameObject in gameObject.transform) {
+            if (positionGameObject.childCount > 0) {
                 return false;
             }
         }

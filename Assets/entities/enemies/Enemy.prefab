@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c53689f84a096da4ab8cc0db35f8c81c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 50
   projectile: {fileID: 1746406610438234, guid: 5b134a48ff7f2d4488fd5b18ed6002a9, type: 2}
   pulseLaserSpeed: 5
   fireRate: 2
