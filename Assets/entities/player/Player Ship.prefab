@@ -116,7 +116,7 @@ MonoBehaviour:
   shipPadding: 1
   projectile: {fileID: 0}
   pulseLaserSpeed: 10
-  fireRate: 0.1
+  fireRate: 0.5
   health: 100
 --- !u!212 &212059290195120214
 SpriteRenderer:

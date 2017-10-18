@@ -9,9 +9,17 @@ public class EnemyBehavior : MonoBehaviour {
     public float pulseLaserSpeed = 5f;
     public float fireRate = 0.2f;
     public float shotsPerSecond = 0.5f;
-	
-	// Update is called once per frame
-	void Update () {
+    public Animation deathAnimation;
+    public int scoreValue = 50;
+
+    private ScoreKeeper scoreKeeper;
+
+    private void Start() {
+        scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
+    }
+
+    // Update is called once per frame
+    void Update () {
         float probabilityOfFiring = shotsPerSecond * Time.deltaTime;
         if (Random.value < probabilityOfFiring) {
             Shoot();
@@ -28,9 +36,14 @@ public class EnemyBehavior : MonoBehaviour {
 
             if (this.health <= 0) {
                 Debug.Log("Enemy Killed");
-                Destroy(this.gameObject);
+                EnemyDeath(this.gameObject);
+                scoreKeeper.Score(this.scoreValue);
             }
         }
+    }
+
+    void EnemyDeath(GameObject gameObject) {
+        Destroy(gameObject);
     }
 
     void Shoot() {
